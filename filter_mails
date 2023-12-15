@@ -62,8 +62,8 @@ endif
 ### Specific Destination Mail Check ###
 
 if
- $header_to: contains "@suculento.pt"
- or $header_to: contains "@sailorstar.info"
+ $header_to: contains "@xxx.com"
+ or $header_to: contains "@xxx.info"
 then
  fail text "Mail TO $header_to is temporarily blocked by the Administrator - $received_protocol"
 seen finish
