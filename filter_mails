@@ -42,7 +42,7 @@ endif
 if
  $sending_ip_address is "127.0.0.1"
  and $header_from: does not contain $smtp_active_hostname
- and $authenticated_id is not $return_path
+ and $authenticated_id is not $sender_address
 then
  headers add "Old: $h_subject"
  headers remove "Subject"
