@@ -54,7 +54,12 @@ if
  and $recipients is not $sender_address
  and $header_subject: does not begin "Cron <$sender_ident@"
 then
- fail text "Mail TO $recipients FROM ROOT EMAIL $sender_address is not allowed  - $received_protocol"
+ headers add "Old: $h_subject"
+ headers remove "Subject"
+ headers add "Subject: Discarded: SUBJECT: $h_old - REASON: Mail TO $recipients FROM ROOT EMAIL $sender_address is not allowed - $received_protocol"
+ headers remove "Old"
+ deliver $sender_address
+# fail text "Mail TO $recipients FROM ROOT EMAIL $sender_address is not allowed  - $received_protocol"
 seen finish
 endif
 
