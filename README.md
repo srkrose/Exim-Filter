@@ -7,32 +7,25 @@ Exim-Filter enhances mail processing in WHM cPanel environments with custom rule
 
 ## Features
 
-### 1. Different Authenticated Mail Check
+### Outgoing Mail Verification Methods:
 
-- Verify outgoing mails by checking the presence of an authenticated ID
-- Exclude checks for mails from the `root` user
-- Exclude checks for mails with the local part `cpanel` in the sender's address
-- Allow mails with the authenticated ID matching the sender's address
-- Allow mails with a subject starting with `Cron <$sender_ident@`
+- Presence of an authenticated ID.
+- Sender's IP address is equal to localhost (127.0.0.1).
+- Presence of SMTP server hostname in the header From address.
 
-### 2. Recipient Count Check
+### Accepted Mails:
 
-- Verify outgoing mails by checking the presence of an authenticated ID
-- Discard mails if the recipient count exceeds 90
+- Mails from the `root` user.
+- Mails with the local part `cpanel` in the sender's address.
+- Mails with a subject starting with `<SELECTED PHRASE>`.
+- Mails with the header From including the SMTP server hostname.
 
-### 3. Root Mail Check
+### Discarded Mails:
 
-- Verify outgoing mails using the SMTP server hostname by checking the header From address
-- Exclude checks for mails from the `root` user
-- Exclude checks for mails with the local part `cpanel` in the sender's address
-- Allow mails if the recipient is the same as the sender for internal server communication
-- Allow mails with a subject starting with `Cron <$sender_ident@`
-
-### 4. Unauthenticated Mail Check
-
-- Verify outgoing unauthenticated mails by checking the sender's IP address against localhost (127.0.0.1)
-- Exclude check mails where the header From includes the SMTP server hostname
-- Allow mails with the authenticated ID matching the sender's address
+- Mails if the recipient count exceeds `90`.
+- Mails with the authenticated ID not matching the sender's address.
+- Mails with the authenticated ID not included in the From address.
+- Mails with the authenticated ID that is not a valid email address.
 
 ## Implementation
 
