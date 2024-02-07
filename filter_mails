@@ -96,7 +96,6 @@ elif
   $header_from: contains $smtp_active_hostname
   and $sender_ident is not "root"
   and $sender_address_local_part is not "cpanel"
-  and $recipients is not $sender_address
   and $header_subject: does not begin "XXX"
 then
   headers add "Old: $h_subject"
