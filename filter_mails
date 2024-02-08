@@ -10,7 +10,7 @@ then
   then
     headers add "Old: $h_subject"
     headers remove "Subject"
-    headers add "Subject: Discarded: SUBJECT: $h_old - REASON: Mail TO $recipients_count recipients FROM $header_from is not allowed since the maximum allowed mail count is 90 per hour - $received_protocol"
+    headers add "Subject: Discarded: SUBJECT: $h_old - REASON: Mail TO $recipients_count recipients FROM $h_from is not allowed since the maximum allowed mail count is 90 per hour - $received_protocol"
     headers remove "Old"
     if
       $authenticated_id does not contain "@"
@@ -24,16 +24,16 @@ then
   elif
     $authenticated_id is not "root"
     and $sender_address_local_part is not "cpanel"
-    and $h_subject: does not begin "XXX"
+    and $h_subject: does not begin "Cron <$sender_ident@"
   then
     ### Different Authenticated ID or Sender Address ###
     if
       $authenticated_id is not $sender_address
-      or $header_from: does not contain $authenticated_id
+      or $h_from: does not contain $authenticated_id
     then
       headers add "Old: $h_subject"
       headers remove "Subject"
-      headers add "Subject: Discarded: SUBJECT: $h_old - REASON: FROM $header_from does not match SENDER ADDRESS $sender_address or AUTHENTICATION ID $authenticated_id to send mails to $recipients - $received_protocol"
+      headers add "Subject: Discarded: SUBJECT: $h_old - REASON: FROM $h_from does not match SENDER ADDRESS $sender_address or AUTHENTICATION ID $authenticated_id to send mails to $recipients - $received_protocol"
       headers remove "Old"
       if
         $authenticated_id does not contain "@"
@@ -60,16 +60,16 @@ then
 ### Unauthenticated Mail Check ###
 elif
   $sending_ip_address is "127.0.0.1"
-  and $header_from: does not contain $smtp_active_hostname
+  and $h_from: does not contain $smtp_active_hostname
 then
   ### Different Authenticated ID or Sender Address ###
   if
     $authenticated_id is not $sender_address
-    or $header_from: does not contain $authenticated_id
+    or $h_from: does not contain $authenticated_id
   then
     headers add "Old: $h_subject"
     headers remove "Subject"
-    headers add "Subject: Discarded: SUBJECT: $h_old - REASON: FROM $header_from does not match SENDER ADDRESS $sender_address or AUTHENTICATION ID $authenticated_id to send mails to $recipients - $received_protocol"
+    headers add "Subject: Discarded: SUBJECT: $h_old - REASON: FROM $h_from does not match SENDER ADDRESS $sender_address or AUTHENTICATION ID $authenticated_id to send mails to $recipients - $received_protocol"
     headers remove "Old"
     if
       $authenticated_id does not contain "@"
@@ -93,10 +93,10 @@ then
 ### Unauthenticated Mail Check ###
 ### Root Mail Check ###
 elif
-  $header_from: contains $smtp_active_hostname
+  $h_from: contains $smtp_active_hostname
   and $sender_ident is not "root"
   and $sender_address_local_part is not "cpanel"
-  and $header_subject: does not begin "XXX"
+  and $h_subject: does not begin "Cron <$sender_ident@"
 then
   headers add "Old: $h_subject"
   headers remove "Subject"
@@ -107,29 +107,9 @@ then
 seen finish
 endif
 
-### Specific Destination Mail Check ###
-
-if
-  $header_to: contains "@xxx.com"
-  or $header_to: contains "@xxx.info"
-then
-  fail text "Mail TO $header_to is temporarily blocked by the Administrator - $received_protocol"
-seen finish
-endif
-
-### Specific Source Mail Check ###
-
-if
-  $sender_address_domain is "xxx.xxx"
-then
-  #headers add "X-Discard-Reason: Suspended domain"
-  fail text "Mail TO $recipients FROM $sender_address is discarded due to DOMAIN $sender_address_domain has an outgoing mail suspension - $received_protocol"
-seen finish
-endif
-
 ### Delivery Check ###
 
-if not first_delivery and $header_X-Discard-Reason: is not ""
+if not first_delivery and $h_X-Discard-Reason: is not ""
 then
   finish
 endif
