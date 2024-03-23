@@ -10,7 +10,7 @@ then
   then
     headers add "Old: $h_subject"
     headers remove "Subject"
-    headers add "Subject: Discarded: SUBJECT: $h_old - REASON: Mail TO $recipients_count recipients FROM $h_from is not allowed since the bulk email sending is not supported - $received_protocol"
+    headers add "Subject: Discarded: SUBJECT: $h_old - REASON: Mail TO $recipients_count recipients (maximum: 10) FROM $h_from is not allowed since the bulk email sending is not supported - $received_protocol"
     headers remove "Old"
     if
       $authenticated_id does not contain "@"
