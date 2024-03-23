@@ -6,11 +6,11 @@ if
 then
   ### Recipient Count Check ###
   if
-    $recipients_count is above 90
+    $recipients_count is above 10
   then
     headers add "Old: $h_subject"
     headers remove "Subject"
-    headers add "Subject: Discarded: SUBJECT: $h_old - REASON: Mail TO $recipients_count recipients FROM $h_from is not allowed since the maximum allowed mail count is 90 per hour - $received_protocol"
+    headers add "Subject: Discarded: SUBJECT: $h_old - REASON: Mail TO $recipients_count recipients FROM $h_from is not allowed since the bulk email sending is not supported - $received_protocol"
     headers remove "Old"
     if
       $authenticated_id does not contain "@"
