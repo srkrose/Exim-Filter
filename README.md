@@ -22,7 +22,7 @@ Exim-Filter enhances mail processing in WHM cPanel environments with custom rule
 
 ### Discarded Mails:
 
-- Mails if the recipient count exceeds `90`.
+- Mails if the recipient count exceeds `10`.
 - Mails with the authenticated ID not matching the sender's address.
 - Mails with the authenticated ID not included in the From address.
 - Mails with the authenticated ID that is not a valid email address.
